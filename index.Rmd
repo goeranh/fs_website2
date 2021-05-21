@@ -20,16 +20,25 @@ Denna *kunskapsplattform* är tematiskt indelad - *de tidiga åren*, *skolåren*
 
 Livsvillkoren under de första levnadsåren har stor betydelse för hur barnets förutsättningar för lärande utvecklas. Här redovisas kortfattat vad forskningen säger om sambanden mellan livsvillkoren under de tidiga åren och framför allt kognitiv utveckling men även om hälsoutveckling.
 
+De tidiga åren är därför ett viktigt tillfälle för insatser för att främja barns kognitiva utveckling.
+
 ### [Skolåren](02_schoolage.html)
+
+På individnivå har skolresultaten starka samband med socioekonomisk position och migrationsbakgrund. Men det finns även kontextuella faktorer som påverkar den enskilda elevens skolresultat.
 
 Skolan behöver bli bättre på att utjämna skillnader genom stöd till elever med sämre förutsättningar.
 
-### [Ung, snart vuxen](03_soon_adults.html)
+### [Unga vuxna](03_soon_adults.html)
+
+I stort sett samtliga ungdomar genomgår någon av gymnasieskolans nationella program eller något av introduktionsprogrammen. Även om de flesta ungdomar gör en relativt problemfri resa in i arbetslivet är variationen mellan olika grupper av ungdomar stor. Ungdomar med funktionsvariationer, med migrationsbakgrund eller blir utan fullständiga gymnasiebetyg har betydligt svårare att etablera en arbetsmarknadsanknytning än övriga.
 
 Unga vuxna som inte fullföljt grundskolan och gymnasiet behöver få ytterligare en chans till utbildning, via exempelvis folkhögskola eller vuxenutbildning.
 
 ### [Barns och ungas psykiska hälsa](04_mental_health.html)
 
+Psykisk ohälsa hos barn och unga har ökat sedan 1980-talet. Utvecklingen ser olika ut beroende på hur psykisk ohälsa definieras. Vi kan skilja mellan självrapporterade psykiska besvär och psykiatriska diagnoser.
+
+För många barn försämras hälsotillståndet under skolåren, ofta förknippat med snävare livsvillkor. En särskilt sårbar grupp är asylsökande barn , ensamkommande barn och ungdomar. I synnerhet papperslösa barn lever ofta under oanständiga förhållanden.
 
 ### [Statistik](05_statistik.html)
 
