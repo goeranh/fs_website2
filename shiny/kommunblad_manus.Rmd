@@ -1,0 +1,692 @@
+---
+title: "Kommunfaktablad - Kraftsamling Fullföljda studier"
+output:
+  word_document:
+    reference_docx: template.docx
+# output: 
+#   html_document:
+#     toc: true
+#     toc_float: true
+#     theme: united
+#     fig_width: 6
+#     fig_height: 4
+#     fig_caption: true
+    
+params: 
+  studkom: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+               eval = TRUE,
+               warning = FALSE,
+               message = FALSE)
+```
+
+```{r libs,include=FALSE}
+library(readxl)
+library(tidyverse)
+
+```
+
+```{r prepare, results='hide'}
+
+### Kommunid
+komid <- read_excel("kommunblad/kommunkoder.xlsx") %>% 
+  mutate(komkombi = paste(komNr, komnamn))
+
+```
+
+
+```{r studkom, echo=FALSE}
+studkom <- str_trim(komid$komnamn[10], side = "both")
+# studkom <- params$studkom
+
+studkf <- str_trim(komid$kf_namn[10], side = "both")
+
+```
+
+```{r workfiles, echo=FALSE}
+
+## plockar ut arbetsfiler för VGR, kommunen och kommunalförbund
+
+### barnfattigdom
+
+df1_poverty <- read_csv("../data/kommunblad/df_kpi_1_poverty.csv") %>% 
+  left_join(komid, by = c("municipality_id" = "komNr"))
+  
+  
+df2_arblosparent <- read_csv("../data/kommunblad/df_kpi_2_workless_parents.csv") %>%
+  left_join(komid, by = c("municipality_id" = "komNr"))
+
+df3_newmigrants <- read_csv("../data/kommunblad/df_kpi_3_newmigrants.csv") %>% 
+  left_join(komid, by = c("municipality_id" = "komNr"))
+
+df3b_migrantbgr <- read_csv("../data/kommunblad/df_kpi_3b_migrantbgr.csv") %>%
+  left_join(komid, by = c("municipality_id" = "komNr"))
+
+df6_preschool <- read_csv("../data/kommunblad/df_kpi_6_preschool.csv") %>%
+  left_join(komid, by = c("municipality_id" = "komNr"))
+
+df7_gymbehorig <- read_csv("../data/kommunblad/df_kpi_7_gymbehorighet.csv") %>%
+  left_join(komid, by = c("municipality_id" = "komNr"))
+
+df8_gymexam <- read_csv("../data/kommunblad/df_kpi_8_gymexam.csv") %>%
+  left_join(komid, by = c("municipality_id" = "komNr"))
+
+
+
+```
+
+# `r studkom`
+
+Detta *faktablad* innehåller ett antal indikatorer på förhållanden som är av betydelse för barns och ungas skolresultat och senare deras möjligheter till att etablera ett självständigt liv med arbete, inkomst och bostad. 
+
+Indikatorerna är hämtade ur befintliga databaser och beskriver vissa bakgrundsfaktorer, förhållanden under de första levnadsåren, skolåren och som blivande vuxen. Där det har varit möjligt görs jämförelser mellan  `r studkom` och övriga kommuner i Västra Götaland.  
+
+## Bakgrundsdata
+
+Nedanstående indikatorer avspeglar generella förutsättningar av betydelse för barn för deras framtida skolutveckling. Det är *barnfattigdomsindex*, *långtidsarbetslöshet* bland föräldrar och *migrationsbakgrund.*
+
+### Barnfattigdomsindex efter region, år och resultat 
+
+Föräldrarnas inkomster och  försörjningsmöjligheter är på många sätt avgörande för villkoren under uppväxten. Barn i familjer med små ekonomiska resurser är särskilt sårbara. Att växa upp i fattigdom kan påverka ett barns liv negativt på flera sätt. Låg ekonomisk status och ekonomiska problem kan påverka bland annat fysisk och psykisk hälsa [^1], hälsobeteenden och skolresultat [^2], sociala relationer och graden av trångboddhet [^3]. 
+
+[^1]: McKenna C, Law C, Pearce A. Increased household financial strain, the Great Recession and child health – findings from the UK Millennium Cohort Study. BMJ Open. 2017;7(3): e015559.
+
+[^2]: United Nations Children's Fund (UNICEF). Fairness for children: a league table of inequality in child well-being in rich countries. Florence: UNICEF office of Research - Innocenti; 2016. Innocenti Report Card no. 13.
+
+[^3]: Bergnehr D, Enell S. Ungdomars och unga vuxnas levnadsvillkor i Sverige: en kunskapsöversikt med fokus på ojämlikhet. Stockholm: FORTE; 2017.
+
+Denna indikator anger andelen invånare 0-19 år som lever i ekonomiskt utsatta hushåll. Nyckeltalet beräknas på samma sätt som Rädda barnens Barnfattigdomsindex som dock använder åldersgruppen 0-17 år. De som inkluderas är folkbokförda hos en vårdnadshavare och ingår i helårshushåll vilket innebär att de vuxna i hushållet ska ha varit folkbokförda både 1 jan och 31 dec aktuellt år samt att hushållets disponibla inkomst ska vara skild från 0 kr. Inkomster från grannländerna för svenska gränspendlare saknas i stor utsträckning.
+
+
+```{r childpoverty}
+
+wf_kom <- df1_poverty %>% 
+  filter(komnamn == studkom)
+
+wf_kf <- df1_poverty %>% 
+  filter(kf_namn == studkf)
+
+wf_vg_lastyear <- df1_poverty %>% 
+  filter(str_sub(municipality_id, 1, 2) != "00" & year == max(year))
+  
+
+wf_vg <- df1_poverty %>%
+  filter(str_sub(municipality_id, 1, 2) == "00") 
+
+  # group_by(year)
+  # summarise(value = mean(value)) %>%
+  # mutate(komnamn = "Västra Götaland")
+
+
+```
+
+
+
+```{r viz1_childpoverty}
+
+tmpkom <- wf_kom %>% 
+  filter(year == max(year))
+
+tmpkf <-  wf_kf %>% 
+  filter(year == max(year))
+
+tmpvg <-  wf_vg %>% 
+  filter(year == max(year))
+
+# mean_vg <- tmpvg %>% mutate(value = mean(value))
+
+### Beräknar jämförelseriktning
+
+trend_vg <- if( tmpkom$value > 1.2 * tmpvg$value[2]){
+          "större än genomsnittet"
+        } else if (tmpkom$value < 0.8 * tmpvg$value[2]){
+          "mindre än genomsnittet" 
+        } else {
+          "ungefär lika stor som genomsnittet"
+          }
+
+trend_riket <- if( tmpkom$value > 1.2 * tmpvg$value[1]){
+          "större än genomsnittet"
+        } else if (tmpkom$value < 0.8 * tmpvg$value[1]){
+          "mindre än genomsnittet" 
+        } else {
+          "ungefär lika stor som genomsnittet"
+          }
+
+ # IQF
+  minmax <- wf_vg_lastyear %>% 
+    # group_by(grade, sex) %>% 
+    summarise(mini = quantile(value, 0.25, na.rm = TRUE),
+              maxi = quantile(value, 0.75, na.rm = TRUE)) %>% 
+    mutate(quants = mini + (maxi-mini)/2,
+           width = maxi - mini)
+
+
+
+### dotplot
+
+ggplot(tmpkf, aes(x = komnamn, y = value))+
+      geom_rect(data = minmax,
+              mapping = aes(x = NULL, y = NULL, xmin = -Inf, xmax = Inf, ymin = mini, ymax = maxi),
+              fill ="steelblue",
+              alpha = 0.2)+
+    geom_point(color = ifelse(tmpkf$komnamn == studkom, "darkred", "steelblue"), 
+               size = ifelse(tmpkf$komnamn == studkom, 6, 4)) +
+    geom_hline(tmpvg, mapping = aes(yintercept = value[2]), linetype = 2, color = "darkblue")+
+  ylim(0, 30)+
+  labs(caption = "Andelen invånare 0-19 år som lever i ekonomiskt utsatta hushåll",
+       x = "",
+       y = "Andel (%)")+
+
+  coord_flip()+
+  theme_bw()
+  
+
+```
+
+Andelen barn och unga (0 - 19 år) som lever i ekonomiskt utsatta hushåll i `r studkom` markeras i figuren med en röd punkt. Övriga kommuner i `r studkf` markeras med blåa punkter. Det blåtonade ytan anger spridningen för *hälften* av kommunerna i Västra Götaland, närmare bestämt den halva som omger medelvärdet. Med andra ord, den fjärdedel av kommunerna med lägst andelar ligger till vänster om det blåa fältet och fjärdedelen med de högsta ligger till höger.
+
+Enligt senast tillgängliga data (`r tmpkom$year`) var den genomsnittliga andelen barn och unga (0 - 19 år) i Västra Götaland `r round(tmpvg$value[2], 0)` procent medan den i `r studkom` var `r round(tmpkom$value, 0)` procent, dvs `r trend_vg` i Västra Götaland.  
+
+Hur har denna andel utvecklats över tid? I nedanstående figur redovisas utvecklingen under `r min(wf_kom$year)` - `r max(wf_kom$year)` tillsammans med den genomsnittliga utvecklingen i Västra Götaland.
+
+```{r viz2_childpoverty}
+
+tmp_kom <- wf_kom %>% mutate(cyear = year - mean(year))
+tmp_vg <- wf_vg %>% mutate(cyear = year - mean(year))
+lm_kom <- lm(value ~ cyear, data = tmp_kom)
+lm_vg <- lm(value ~ cyear, data = tmp_vg)
+
+xx <- tibble(dif = abs(fitted.values(lm_kom) - fitted.values(lm_vg))) %>% 
+  mutate(year = row_number())
+lm_diff = lm(dif ~ year, data = xx)
+
+
+trend_txt <- case_when(coef(lm_diff)[2] < -0.1 ~ "minska något",
+                       coef(lm_diff)[2] > 0.1 ~ "öka något",
+                       TRUE ~ "vara ungefär desamma")
+
+tmp <- wf_kom %>% 
+  select(year, value, municipality) %>% 
+  bind_rows(wf_vg %>% filter(municipality_id == "0014") )
+
+
+ggplot(tmp, aes(x = year, y = value, group = municipality))+
+    geom_line(color = ifelse(tmp$municipality != studkom, "grey80", "darkred"),
+              size = ifelse(tmp$municipality != studkom, 3, 1),
+              alpha = ifelse(tmp$municipality != studkom, 0.5, 1))+
+    geom_point(color = ifelse(tmp$municipality != studkom, "grey80", "darkred"),
+              size = ifelse(tmp$municipality != studkom, 3, 3))+
+    ylim(0, max(tmp$value + 5))+
+    labs(caption = "Andelen invånare 0-19 år som lever i ekonomiskt utsatta hushåll",
+       x = "",
+       y = "Andel (%)")+
+
+    theme_bw()
+
+
+```
+
+
+Skillnaderna mellan `r studkom` och övriga kommuner i Västra Götaland förefaller att `r trend_txt` över tid. 
+
+
+### Barn och unga med minst en långtidsarbetslös förälder 
+
+En längre tids arbetslöshet kan medföra stora konsekvenser för familjens ekonomi, men även för relationerna bland familjemedlemmarna och deras välbefinnande. Det kan medföra ökad risk för att elever med  långtidsarbetslösa föräldrar att få sämre skolresultat än andra. 
+
+Figuren nedan redovisar antal invånare 0-19 med minst en långtidsarbetslös förälder dividerat med totalt antal invånare 0-19 år, multiplicerat med 100. Med långtidsarbetslöshet avses helt utan arbete eller i arbetsmarknadspolitisk åtgärd i 90 eller fler dagar under året.
+
+```{r arblos_parent}
+
+wf_kom <- df_arblosparent %>% 
+  filter(komnamn == studkom & gender == "T")
+
+wf_kf <- df_arblosparent %>% 
+  filter(kf_namn == studkf & gender == "T")
+
+wf_vg_lastyear <- df_arblosparent %>% 
+  filter(municipality != "0000" & period == max(period))
+  
+
+wf_vg <- df_arblosparent %>% 
+  filter(municipality != "0000" & gender == "T") %>% 
+  group_by(period) %>% 
+  summarise(value = mean(value)) %>% 
+  mutate(komnamn = "Västra Götaland")
+
+
+
+```
+
+```{r viz1_arblos_parent}
+
+tmpkom <- wf_kom %>% 
+  filter(period == max(period))
+
+tmpkf <-  wf_kf %>% 
+  filter(period == max(period) & gender == "T")
+
+tmpvg <-  wf_vg %>% 
+  filter(period == max(period))
+
+mean_vg <- tmpvg %>% mutate(value = mean(value))
+
+### description
+
+descript <- read_csv()
+
+### Beräknar jämförelseriktning
+
+trend_txt <-   if( tmpkom$value > 1.2 * mean_vg$value){
+          "större än genomsnittet"
+        } else if (tmpkom < 0.8 * mean_vg$value){
+          "mindre än genomsnittet" 
+        } else {
+          "ungefär lika stor som genomsnittet"
+          }
+
+ # IQF
+  minmax <- wf_vg_lastyear %>% 
+    # group_by(grade, sex) %>% 
+    summarise(mini = quantile(value, 0.25, na.rm = TRUE),
+              maxi = quantile(value, 0.75, na.rm = TRUE)) %>% 
+    mutate(quants = mini + (maxi-mini)/2,
+           width = maxi - mini)
+
+
+
+### dotplot
+
+ggplot(tmpkf, aes(x = komnamn, y = value))+
+      geom_rect(data = minmax,
+              mapping = aes(x = NULL, y = NULL, xmin = -Inf, xmax = Inf, ymin = mini, ymax = maxi),
+              fill ="steelblue",
+              alpha = 0.2)+
+    geom_point(color = ifelse(tmpkf$komnamn == studkom, "darkred", "steelblue"), 
+               size = ifelse(tmpkf$komnamn == studkom, 6, 4)) +
+    geom_hline(tmpvg, mapping = aes(yintercept = value), linetype = 2, color = "darkblue")+
+  ylim(0, 30)+
+  labs(caption = "Andelen invånare 0-19 år med minst en arbetslös förälder",
+       x = "",
+       y = "Andel (%)")+
+
+  coord_flip()+
+  theme_bw()
+  
+```
+
+I `r studkom` var `r max(mean_vg$period)` andelen unga med minst en långtidsarbetslös förälder `r round(tmpkom$value, 0)` procent medan genomsnittet bland Västra Götalands kommuner var `r round(mean_vg$value, 0)` procent, dvs `r trend_txt`.
+
+Utvecklingen under perioden `r min(wf_kom$period)` - `r max(wf_kom$period)` redovisas i figuren nedan.
+
+```{r viz2_arblos_parent}
+
+tmp_kom <- wf_kom %>% mutate(cper = period - mean(period))
+tmp_vg <- wf_vg %>% mutate(cper = period - mean(period))
+lm_kom <- lm(value ~ cper, data = tmp_kom)
+lm_vg <- lm(value ~ cper, data = tmp_vg)
+
+xx <- tibble(dif = abs(fitted.values(lm_kom) - fitted.values(lm_vg))) %>% 
+  mutate(year = row_number())
+lm_diff = lm(dif ~ year, data = xx)
+
+
+trend_txt <- case_when(coef(lm_diff)[2] < -0.1 ~ "något, genom att skillnaderna förefaller minska över tid",
+                       coef(lm_diff)[2] > 0.1 ~ "något, genom att skillnaderna förefaller öka över tid",
+                       TRUE ~ "inte nämnvärt utan skillanderna är ganska likstora över tid")
+
+tmp <- wf_kom %>% 
+  select(period, value, komnamn) %>% 
+  bind_rows(wf_vg) 
+
+
+ggplot(tmp, aes(x = period, y = value, group = komnamn))+
+    geom_line(color = ifelse(tmp$komnamn != studkom, "grey80", "darkred"),
+              size = ifelse(tmp$komnamn != studkom, 3, 1),
+              alpha = ifelse(tmp$komnamn != studkom, 0.5, 1))+
+    geom_point(color = ifelse(tmp$komnamn != studkom, "grey80", "darkred"),
+              size = ifelse(tmp$komnamn != studkom, 3, 3))+
+    ylim(0, max(tmp$value + 5))+
+    theme_bw()
+
+```
+
+Utvecklingen i Västra Götaland och i `r studkom` skiljer sig `r trend_txt`.
+
+### Barn och unga med migrationsbakgrund/nyanlända
+
+Elever med utländsk bakgrund har sämre skolresultat jämfört med elever med svensk bakgrund. Men det finns stora variationer inom gruppen. Till stor del beror detta på hur länge eleven har varit i Sverige, men även på elevens kön och föräldrarnas utbildningsnivå.  
+
+Om eleven anlänt efter skolstart är det betydligt svårare för hen att klara godkända betyg eller behörighet till gymnasiet. Föräldrars utbildningsnivå har stor betydelse för elevers skolresultat. Elever som har föräldrar med eftergymnasial utbildning har i genomsnitt bättre resultat än elever vars föräldrar har en förgymnasial utbildningsnivå. Det gäller för såväl elever med svensk som med utländsk bakgrund. Men elever med utländsk bakgrund har oftare föräldrar med förgymnasial utbildning. 
+
+Här redovisas andelen elever med utländsk bakgrund samt andelen nyanlända elever i `r studkom`.
+`df3_newmigrants$description`
+
+```{r newmigrants}
+
+wf_kom <- df3_newmigrants %>%   
+  filter(komnamn == studkom)
+
+wf_kf <- df3_newmigrants %>% 
+  filter(kf_namn == studkf)
+
+wf_vg_lastyear <- df3_newmigrants %>% 
+  filter(municipality != "0000" & year == max(year))
+  
+
+wf_vg <- df3_newmigrants %>% 
+  filter(municipality != "0000") %>% 
+  group_by(year) %>% 
+  summarise(value = mean(value, na.rm = TRUE)) %>% 
+  mutate(komnamn = "Västra Götaland")
+
+
+
+```
+
+```{r viz1_newmigrants}
+
+tmpkom <- wf_kom %>% 
+  filter(year == max(year))
+
+tmpkf <-  wf_kf %>% 
+  filter(year == max(year))
+
+tmpvg <-  wf_vg %>% 
+  filter(year == max(year))
+
+# mean_vg <- tmpvg %>% mutate(value = mean(value))
+
+### Beräknar jämförelseriktning
+
+trend_txt <-   if( tmpkom$value > 1.2 * mean_vg$value){
+          "större än genomsnittet"
+        } else if (tmpkom$value < 0.8 * mean_vg$value){
+          "mindre än genomsnittet" 
+        } else {
+          "ungefär lika stor som genomsnittet"
+          }
+
+ # IQF
+  minmax <- wf_vg_lastyear %>% 
+    # group_by(grade, sex) %>% 
+    summarise(mini = quantile(value, 0.25, na.rm = TRUE),
+              maxi = quantile(value, 0.75, na.rm = TRUE)) %>% 
+    mutate(quants = mini + (maxi-mini)/2,
+           width = maxi - mini)
+
+
+
+### dotplot
+
+ggplot(tmpkf, aes(x = komnamn, y = value))+
+      geom_rect(data = minmax,
+              mapping = aes(x = NULL, y = NULL, xmin = -Inf, xmax = Inf, ymin = mini, ymax = maxi),
+              fill ="steelblue",
+              alpha = 0.2)+
+    geom_point(color = ifelse(tmpkf$komnamn == studkom, "darkred", "steelblue"), 
+               size = ifelse(tmpkf$komnamn == studkom, 6, 4)) +
+    geom_hline(tmpvg, mapping = aes(yintercept = value), linetype = 2, color = "darkblue")+
+  ylim(0, 30)+
+  labs(caption = "Andelen nyanlända elever",
+       x = "",
+       y = "Andel (%)")+
+
+  coord_flip()+
+  theme_bw()
+  
+```
+
+I `r studkom` var `r max(mean_vg$year)` andelen unga med minst en långtidsarbetslös förälder `r round(tmpkom$value, 0)` procent medan genomsnittet bland Västra Götalands kommuner var `r round(mean_vg$value, 0)` procent, dvs `r trend_txt`.
+
+Utvecklingen under perioden `r min(wf_kom$year)` - `r max(wf_kom$year)` redovisas i figuren nedan.
+
+```{r viz2_newmigrants}
+
+tmp_kom <- wf_kom %>% mutate(cper = year - mean(year, na.rm = TRUE))
+tmp_vg <- wf_vg %>% mutate(cper = year - mean(year, na.rm = TRUE))
+lm_kom <- lm(value ~ cper, data = tmp_kom)
+lm_vg <- lm(value ~ cper, data = tmp_vg)
+
+xx <- tibble(dif = abs(fitted.values(lm_kom) - fitted.values(lm_vg))) %>% 
+  mutate(year = row_number())
+lm_diff = lm(dif ~ year, data = xx)
+
+
+trend_txt <- case_when(coef(lm_diff)[2] < -0.1 ~ "något, genom att skillnaderna förefaller minska över tid",
+                       coef(lm_diff)[2] > 0.1 ~ "något, genom att skillnaderna förefaller öka över tid",
+                       TRUE ~ "inte nämnvärt utan skillanderna är ganska likstora över tid")
+
+tmp <- wf_kom %>% 
+  select(year, value, komnamn) %>% 
+  bind_rows(wf_vg) 
+
+
+ggplot(tmp, aes(x = year, y = value, group = komnamn))+
+    geom_line(color = ifelse(tmp$komnamn != studkom, "grey80", "darkred"),
+              size = ifelse(tmp$komnamn != studkom, 3, 1),
+              alpha = ifelse(tmp$komnamn != studkom, 0.5, 1))+
+    geom_point(color = ifelse(tmp$komnamn != studkom, "grey80", "darkred"),
+              size = ifelse(tmp$komnamn != studkom, 3, 3))+
+    ylim(0, max(tmp$value + 5))+
+    theme_bw()
+
+```
+
+Utvecklingen i Västra Götaland och i `r studkom` skiljer sig `r trend_txt`.
+
+
+**HIT HAR JAG KOMMIT 210519
+
+
+
+
+## De första åren
+
+
+
+
+
+
+
+
+### Antal nyfödingar 2000 – 2020 i kommunen.
+
+
+```{r nyfodda}
+df <- read_excel("kommunblad/nyfodda.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("region" = "komNr")) 
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+ggplot(df_studkom, aes(x = year, y = popsize, group = kön)) +
+  geom_line(aes(colour = kön))+
+  geom_point(aes(colour = kön))
+
+```
+
+###
+### Andel barn 1–5 år som är inskrivna i förskola i kommunen och Västra Götaland 2020
+
+```{r forskola}
+df <- read_excel("kommunblad/forskola.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  group_by(period, gender) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+ggplot(df %>% filter(komnamn == studkom), aes(x = period, y = value))+
+  geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, 100)
+
+
+
+```
+
+
+
+## Skolåren 
+
+### Antal elever i grundskolan 2000 – 2020 i kommunen
+
+
+```{r elev_counts}
+
+df <- read_excel("kommunblad/elevercounts.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn))
+  
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+ggplot(df_studkom, aes(x = period, y = value))+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max(df_studkom$value) * 1.1)
+
+```
+
+
+### Andel elever i grundskolan med utländsk bakgrund i kommunen och Västra Götaland 
+
+```{r elev_utl}
+
+df <- read_excel("kommunblad/elev_utl.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+df_studkom %>% ggplot(aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)
+
+```
+
+
+
+### Andel elever i grundskolan med högutbildade föräldrar i kommunen och Västra Götaland 
+
+```{r elev_parent_higheduc}
+
+df <- read_excel("kommunblad/elever_parent_higheduc.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value))
+  
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)
+
+```
+
+
+### Andel avgångselever åk 9 med gymnasiebehörighet 2015 – 2020 i kommunen och Västra Götaland
+
+```{r gymbehorighet}
+
+df <- read_excel("kommunblad/gymbeh.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)+
+  facet_wrap(~ gender)
+
+```
+
+
+## Ung, snart vuxen
+
+### Andelen ungdomar med gymnasieexamen inom 4 år efter påbörjad utbildning 2015 – 2020 i kommunen och Västra Götaland
+
+```{r gymexam}
+
+df <- read_excel("kommunblad/gymexam.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period, gender) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.2)+
+  facet_wrap(~ gender)
+
+```
+
+
+### Långtidsarbetslöshet 16-24 år, andel (%) av bef.
+
+
+```{r longarblos1624}
+
+df <- read_excel("kommunblad/long_arblos1624.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)+
+  facet_wrap(~ gender)
+
+```
+
+
+
+

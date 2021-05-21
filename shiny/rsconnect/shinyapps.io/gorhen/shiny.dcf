@@ -1,0 +1,12 @@
+name: shiny
+title: shiny
+username:
+account: gorhen
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3532253
+bundleId: 4149606
+url: https://gorhen.shinyapps.io/shiny/
+when: 1611755326.34833
+asMultiple: FALSE
+asStatic: FALSE

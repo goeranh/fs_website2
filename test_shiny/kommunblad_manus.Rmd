@@ -1,0 +1,327 @@
+---
+title: "Kommunblad - Basindikatorer Fullföljda studier"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: united
+    fig_width: 6
+    fig_height: 4
+    fig_caption: true
+    
+params: 
+  studkom: NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+               eval = TRUE,
+               warning = FALSE,
+               message = FALSE)
+```
+
+```{r libs,include=FALSE}
+library(readxl)
+library(tidyverse)
+
+```
+
+```{r prepare, results='hide'}
+
+### Kommunid
+komid <- read_excel("../data/kommunblad/kommunkoder.xlsx") %>% 
+  mutate(komkombi = paste(komNr, komnamn))
+
+```
+
+
+```{r studkom, echo=FALSE}
+# studkom <- str_trim(komid$komnamn[10], side = "both")
+studkom <- params$studkom
+
+```
+
+# `r studkom`
+
+Nedanstående indikatorer syftar till att ge en översiktlig bild av hur faktorer av betydelse för skolresultat ser ut i `r studkom`. 
+
+## Bakgrundsdata
+
+I detta avsnitt redovisas folkmängd, antal unga 0-19 år. 
+
+### Folkmängd efter funktionella åldersgrupper och kön 2020
+
+```{r popsize}
+
+df <- read_excel("../data/kommunblad/popsize.xlsx") %>% 
+  mutate(         agegrp = as.factor(agegrp) %>% 
+           fct_relevel("-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49",
+                        "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90-94", "95-99", "100+")) %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("Region" = "komNr")) %>% 
+  filter(komnamn == studkom)  
+  
+pic <- df %>% 
+  ggplot(aes(x = agegrp))+
+  geom_bar(df %>% filter(Kon == "1"),
+           mapping = aes(y = popsize * -1),
+           stat = "identity",
+           fill = "firebrick") +
+  geom_bar(df %>% filter(Kon == "2"), 
+           stat = "identity",
+           mapping = aes(y = popsize),
+           fill = "steelblue") +
+  # facet_wrap(~Kon, 
+  #            nrow = 2)+
+  coord_flip()+
+  labs(caption ="Källa: SCB")
+
+
+```
+
+Folkmängden i `r studkom` år 2020 var `r sum(df$popsize)` personer, varav `r sum(df[df$Kon == "1", ]$popsize)` är män och `r sum(df[df$Kon == "2", ]$popsize)` kvinnor. Åldersfördelningen framgår av befolkningspyramiden nedan.
+
+```{r}
+pic
+
+```
+
+
+
+### Antal invånare 0-19 år efter födelseregion per kön 2020.
+
+```{r utlfodda0_19}
+
+df <- read_excel("../data/kommunblad/utlfodda.xlsx") %>% 
+  mutate(         agegrp = as.factor(agegrp) %>% 
+           fct_relevel("-4", "5-9", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40-44", "45-49",
+                        "50-54", "55-59", "60-64", "65-69", "70-74", "75-79", "80-84", "85-89", "90-94", "95-99", "100+")) %>%   
+  left_join(komid %>% select(komNr, komnamn), by = c("region" = "komNr")) %>% 
+  mutate(agecat = case_when(agegrp == "-4" ~ "0-19",
+                           agegrp == "5-9" ~ "0-19",
+                           agegrp == "10-14" ~ "0-19",
+                           agegrp == "15-19" ~ "0-19",
+                           agegrp == "20-24" ~ "20-44",
+                           agegrp == "25-29" ~ "20-44",
+                           agegrp == "30-34" ~ "20-44",
+                           agegrp == "35-39" ~ "20-44",
+                           agegrp == "40-44" ~ "45-64",
+                           agegrp == "45-49" ~ "45-64",
+                           agegrp == "50-54" ~ "45-64",
+                           agegrp == "55-59" ~ "45-64",
+                           agegrp == "60-64" ~ "45-64",
+                           TRUE ~ "65+")) %>% 
+  group_by(region, kön, agecat, födelseregion, komnamn) %>% 
+  summarise(popsize = sum(popsize)) %>% 
+  group_by(region, kön, komnamn) %>% 
+  mutate(totpop = sum(popsize))
+
+
+df_studkom <- df %>% filter(komnamn == studkom)
+
+ggplot(df_studkom, aes(x = agecat, y = popsize, fill = födelseregion))+
+  geom_bar(stat = "identity")+
+  facet_wrap(~ kön)
+
+
+```
+
+
+## De första åren
+
+
+### Antal nyfödingar 2000 – 2020 i kommunen.
+
+
+```{r nyfodda}
+df <- read_excel("../data/kommunblad/nyfodda.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("region" = "komNr")) 
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+ggplot(df_studkom, aes(x = year, y = popsize, group = kön)) +
+  geom_line(aes(colour = kön))+
+  geom_point(aes(colour = kön))
+
+```
+
+###
+### Andel barn 1–5 år som är inskrivna i förskola i kommunen och Västra Götaland 2020
+
+```{r forskola}
+df <- read_excel("../data/kommunblad/forskola.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  group_by(period, gender) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+ggplot(df %>% filter(komnamn == studkom), aes(x = period, y = value))+
+  geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, 100)
+
+
+
+```
+
+
+
+## Skolåren 
+
+### Antal elever i grundskolan 2000 – 2020 i kommunen
+
+
+```{r elev_counts}
+
+df <- read_excel("../data/kommunblad/elevercounts.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn))
+  
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+ggplot(df_studkom, aes(x = period, y = value))+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max(df_studkom$value) * 1.1)
+
+```
+
+
+### Andel elever i grundskolan med utländsk bakgrund i kommunen och Västra Götaland 
+
+```{r elev_utl}
+
+df <- read_excel("../data/kommunblad/elev_utl.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+df_studkom %>% ggplot(aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)
+
+```
+
+
+
+### Andel elever i grundskolan med högutbildade föräldrar i kommunen och Västra Götaland 
+
+```{r elev_parent_higheduc}
+
+df <- read_excel("../data/kommunblad/elever_parent_higheduc.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value))
+  
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)
+
+```
+
+
+### Andel avgångselever åk 9 med gymnasiebehörighet 2015 – 2020 i kommunen och Västra Götaland
+
+```{r gymbehorighet}
+
+df <- read_excel("../data/kommunblad/gymbeh.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)+
+  facet_wrap(~ gender)
+
+```
+
+
+## Ung, snart vuxen
+
+### Andelen ungdomar med gymnasieexamen inom 4 år efter påbörjad utbildning 2015 – 2020 i kommunen och Västra Götaland
+
+```{r gymexam}
+
+df <- read_excel("../data/kommunblad/gymexam.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period, gender) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)+
+  facet_wrap(~ gender)
+
+```
+
+
+### Långtidsarbetslöshet 16-24 år, andel (%) av bef.
+
+
+```{r longarblos1624}
+
+df <- read_excel("../data/kommunblad/long_arblos1624.xlsx") %>% 
+  left_join(komid %>% select(komNr, komnamn), by = c("municipality" = "komNr")) %>% 
+  filter(!is.na(komnamn)) %>% 
+  group_by(period) %>% 
+  mutate(vg_mean = mean(value, na.rm = TRUE))
+
+df_studkom <- df %>% filter(komnamn == studkom) 
+
+max_y <- as.numeric(c(df_studkom$value, df_studkom$vg_mean)) %>% max()
+
+ggplot(df_studkom, aes(x = period, y = value))+
+    geom_line(aes(x = period, y = vg_mean), 
+            color = "grey80",
+            size = 4)+
+  geom_line(color = "firebrick")+
+  geom_point(color = "firebrick")+
+  ylim(0, max_y * 1.1)+
+  facet_wrap(~ gender)
+
+```
+
+
+
+

@@ -1,0 +1,44 @@
+---
+title: "Fullföljda studier (work in progress)"
+output:
+  html_document:
+    df_print: paged
+bibliography: references.bib
+---
+
+#### *OBS: Denna webbplats är ännu en prototyp för att visa hur innehållet i en kunskapsplattform kan organiseras. Fokus ligger på funktionaliteter snarare än design och layout. Syftet är att vara ett underlag för diskussioner med samarbetspartners i kraftsamlingen kring hur ett relevant innehåll kan se ut i en kommande skarp version.*
+
+------------------------------------------------------------------------
+
+Barn och unga ska ha de bästa förutsättningarna för en bra start i livet. En kraftsamling för fullföljda studier ger stora och långsiktiga vinster för såväl individen som samhället. För att komma framåt i arbetet krävs att parter med olika ansvarsområden, resurser och perspektiv samarbetar för att nå resultat.
+
+## Vad finns här?
+
+Denna *kunskapsplattform* är tematiskt indelad - *de tidiga åren*, *skolåren* och *tiden som ung vuxen*. Under varje avsnitt en text om vad forskningen säger om respektive livsfas i relation till skolresultat. Här finns även *länkad statistik* samt *referenser* för den som vill veta mer. Dessutom finns *kommunfakta* som innehåller sammanställd statistik per kommun att ladda hem.
+
+### [De tidiga åren](01_first_years.html)
+
+Livsvillkoren under de första levnadsåren har stor betydelse för hur barnets förutsättningar för lärande utvecklas. Här redovisas kortfattat vad forskningen säger om sambanden mellan livsvillkoren under de tidiga åren och framför allt kognitiv utveckling men även om hälsoutveckling.
+
+### [Skolåren](02_schoolage.html)
+
+Skolan behöver bli bättre på att utjämna skillnader genom stöd till elever med sämre förutsättningar.
+
+### [Ung, snart vuxen](03_soon_adults.html)
+
+Unga vuxna som inte fullföljt grundskolan och gymnasiet behöver få ytterligare en chans till utbildning, via exempelvis folkhögskola eller vuxenutbildning.
+
+### [Barns och ungas psykiska hälsa](04_mental_health.html)
+
+
+### [Statistik](05_statistik.html)
+
+Här hittar du som gillar siffror en rad direktlänkar till relevanta indikatorer i publika databaser, t.ex. VGR:s statistikdatabas, SCB, Kolada, Folkhälsomyndigheten. Via gränssnitten väljer du själv ut vilka variabler och kategorier du vill tanka hem. Det är lättare än du tror.
+
+### [Litteratur, länkar, etc.](06_referenser.html)
+
+Här finns en rad referenser till litteratur, rapporter och annan relevant kunskap för att förstå *varför* skolmisslyckanden uppstår, vilket man kan säga är en förutsättning för att veta vilka insatser som har potential att motverka skolmisslyckanden.
+
+### [Kommunblad](07_kommunblad.html)
+
+För den som är mer obekväm att själv välja ut och tanka hem statistik finns här möjlihet att ladda hem färdiga sammanställningar av "skolrelevanta" indikatorer per kommun.

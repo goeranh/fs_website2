@@ -1,0 +1,35 @@
+---
+title: 'Litteratur, länkar, etc. '
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Litteratur
+
+-   Bannert, Robert 2004: På väg mot svenskt uttal. Studentlitteratur.
+-   Ballatore, Rosario M, Margherita Fort & Andrea Ichino 2014: The Tower of Babel in the Classroom. Immigrants and Natives in Italian Schools. Discussion Paper 8732, IZA. Instititute for the Study of Labor, Bonn.
+-   Brunello, Giorgio & Lorenzo Rocco 2013: "The Effect of Immigration on the School Performance of Natives: Cross Country Evidence Using PISA Test Scores." Economics of Education Review 32:234-246.
+-   Bunar, Nihad red. 2015: Nyanlända och lärande -- mottagande och inkludering. Natur & Kultur.
+-   Flood, Lennart & Joakim Ruist 2015: "Migration, en åldrande befolkning och offentliga finanser" Bilaga 6 i Långtidsutredningen 2015, SOU 2015:95.
+-   Freeman, Gary P & Nikola Mirilovic 2016: Handbook on Migration and Social Policy. Edgar Elgar Publishing Limited.
+-   Gustafsson, Jan-Eric, Christina Cliffordsson & Gudrun Erickson 2014: Likvärdig kunskapsbedömning i och av den svenska skolan -- problem och möjligheter. SNS förlag.
+-   Gustafsson, Jan-Eric, Sverker Sörlin & Jonas Vlachos (2016): Policyidéer för svensk skola. SNS förlag.
+-   Heath, Anthony & Elina Kilpi-Jakonen 2012: "Immigrant Children's Age at Arrival and Assessment Results", OECD Education Working Papers, No. 75, OECD Publishing.
+-   Hinnerich, Björn T. & Jonas Vlachos 2013: "Systematiska skillnader mellan interna och externa bedömningar av nationella prov -- en uppföljningsrapport". Resultatbilaga till Skolinspektionen 2013: Olikheterna är för stora. Omrättning av nationella prov i grundskolan och gymnasieskolan.
+-   Hinnerich, Björn T, Erik Höglin & Magnus Johannesson 2011: Ethnic Discrimination in High School Grading: Evidence from a Field Experiment. SSE/EFI Working Paper Series in Economics and Finance No. 733 June, 2011.
+-   IFAU 2014: Decentralisering, skolval och fristående skolor: resultat och likvärdighet i svensk skola. Rapport 2014:25.
+-   Lindahl, Erica 2007: Systematiska avvikelser mellan slutbetyg och provresultat -- spelar elevens kön och etniska bakgrund roll? IFAU rapport 2007:22.
+-   Martin, Michael O., Ina V.S. Mullis, Pierre Foy & Gabrielle M. Stanco 2012: TIMSS 2011 International results in science. International Association for the Evaluation of educational achievement.
+-   Mullis, Ina V.S., Michael O. Martin, Pierre Foy & Alka Arora 2012: TIMSS 2011 International results in mathematics. International Association for the Evaluation of educational achievement.
+-   OECD 2014: Finding the Way: A Discussion of the Swedish Migrant Integration System.
+
+## Länkar
+
+[Skolverket](https://www.skolverket.se/)
+
+[Folkhälsomyndigheten Folkhälsodata](http://fohm-app.folkhalsomyndigheten.se/Folkhalsodata/pxweb/sv/)

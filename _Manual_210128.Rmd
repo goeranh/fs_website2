@@ -1,0 +1,20 @@
+---
+title: "Manual för underhåll av plattformen"
+author: "GH"
+date: '2021-01-28'
+output: html_document
+---
+
+## Inledning
+
+Kunskapsplattformen är en webbapplikation som är byggd i R och RMarkdown. Denna manual kan användas för att drifta och uppdatera data som används i plattformen. 
+
+Plattformen innehåller tre delar:
+
+  1. **Teoretisk del** som redovisar aktuell kunskap om bakomliggande förhållanden och mekanismer som ger upphov till skolmisslyckanden. Denna del innehåller sammandrag av aktuellt   kunskapsläge kring skolmisslyckanden och vad som ligger bakom.
+  2. **Statistik** - dels länkar till indikatorer som är relevanta för att belysa hur förhållanden som ligger bakom skolmisslyckanden utvecklas, dels *kommunfakta-blad*,   sammanställningar av vissa indikatorer per kommun för den som känner sig obekväm med att själv rådda i publika databaser.
+  3. **Länk/referens-samling** - referenser till litteratur, rapporter, kunskapsöversikter och länkar till mydigheter, organisationer som är relevanta för kraftsamlingen.
+
+## Uppdateringar
+
+### Teoretisk del

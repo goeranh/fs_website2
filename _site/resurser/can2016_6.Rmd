@@ -1,0 +1,902 @@
+---
+title: "Drogvanor bland ungdomar i Västra Götaland 2019"
+
+# output:
+#   word_document:
+#     reference_docx: template.docx
+
+
+---
+  
+```{r echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      eval = TRUE,
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.width = 7
+                      )
+```
+
+
+```{r libraries, results='hide'}
+library(tidyverse)
+library(readxl)
+library(huxtable)
+
+```
+
+
+```{r data}
+df <- read_csv("data/df.csv")
+
+```
+
+
+```{r workfiles, echo=FALSE}
+
+## plockar ut arbetsfiler för VGR, kommunen och HSN
+
+# studkom = "Borås"
+# studhsn = "hsn3"
+
+wf_vgr <- df %>% 
+  filter(kommun == "VGR*")
+
+wf_kom <- df %>% 
+  filter(kommun == studkom)
+
+wf_hsn <-df %>% 
+  filter(hsn == studhsn)
+
+wf_antal <- wf_kom %>% 
+  filter(vars == "antal")
+
+funcscode <- if_else(any(wf_antal$andel[wf_antal$year == "y19"] < 40),
+                   "funcs/funcs_smallN.R", "funcs/funcs.R")
+
+# kriterium för att välja könsseparering eller inte. Om n < 40: ej könsseparerat.
+n_choice <- any(wf_antal$andel[wf_antal$year == "y19"] < 40)
+
+fig_height <- ifelse(n_choice == TRUE, 3, 4)
+                   
+source(funcscode, encoding = "UTF-8")
+
+
+```
+
+# Resultat för `r studkom`
+
+Denna kortrapport beskriver ett urval av resultatet från CAN-undersökningen 2019 för `r studkom`. Den innehåller utfallet för de centrala frågorna och där det varit möjligt att redovisa resultatet utan att göra avkall på sekretess- och integritetsaspekter. Dessa har definierats av CAN och innebär att om antalet deltagande pojkar eller flickor understiger 40 elever redovisas resultaten med pojkar och flickor sammanslaget. 
+ 
+Rapporten är tänkt att vara ett underlag för kommunens ANDTS-arbete och kan användas av kommunen så som det passar bäst.
+ 
+Undersökningen genomfördes under våren 2019 av Centralförbundet för alkohol- och narkotikaupplysning (CAN) i samarbete med kommunerna och Västra Götalandsregionen. Kortrapporten har sammanställts av enheten för samhällsanalys, Västra Götalandsregionen.
+
+
+# Antal deltagande elever i `r studkom`
+
+Ungdomarna i `r studkom` har deltagit i CAN-undersökningarna 2013, 2016 och 2019. 
+
+
+```{r tabell antal}
+library(huxtable)
+
+tmp_kom <- wf_antal %>%
+  #  filter(kommun == studkom) %>%
+  select(4:7) %>% 
+  unite("yg", c("year", "grade")) %>% 
+  spread(key = yg, value = andel) %>%  
+  select(c(1, 3, 2, 5, 4, 7, 6))
+
+f_ht(tmp_kom)
+
+text_sexsep <- if_else(n_choice == TRUE, "Eftersom antalet deltagande pojkar eller flickor är 
+                       färre än 40 redovisas utfallen för det totala antalet elever.", "")
+```
+
+Antalet medverkande ungdomar folkbokförda i `r studkom` kommun var i årets undersökning `r  as.integer(tmp_kom[3, 6])` i årskurs 9 och `r as.integer(tmp_kom[3, 7])` studerande år 2 på gymnasiet. I något fall stämmer inte summeringen av antalet pojkar och flickor med totalt antal elever. Det beror på att i dessa fall har enstaka elever inte besvarat frågan om könstillhörighet. Denna lilla grupp ingår därför inte i redovisningen.   
+
+`r text_sexsep`
+
+
+
+# Tobaksvanor
+För tobak har två olika mått identifierats som kärnindikatorer i ANDT-uppföljningen: att vara rökare och att vara snusare.
+
+## Rökare
+
+Som rökare räknas de elever som dels uppgett att de har rökt under de senaste 12 månaderna
+och dessutom svarat att de fortfarande röker. 
+
+### Resultatet 2019
+
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på årskurs.  
+
+```{r dotplot_rok, fig.width=5, fig.align="left", fig.height=fig_height}
+
+# extract data to temp dataframe
+tmp <- wf_kom %>% 
+  filter(vars == "rok" & sex == "tot") 
+
+wf_hsn <- df %>% 
+  filter(hsn == studhsn)
+
+g9_13 <- tmp$andel[tmp$grade == "Åk 9" & tmp$year == "y13"]
+g9_19 <- tmp$andel[tmp$grade == "Åk 9" & tmp$year == "y19"]
+g2_13 <- tmp$andel[tmp$grade == "Gymn åk 2" & tmp$year == "y13"]
+g2_19 <- tmp$andel[tmp$grade == "Gymn åk 2" & tmp$year == "y19"]
+
+text_9_time <- case_when(g9_19 > (1.2 * g9_13) ~ "ökat",
+                           g9_19 <= (1.2 * g9_13) & (g9_19 >= 0.8 * g9_13) ~ "varit ungefär oförändrad",
+                           g9_19 < (0.8 * g9_13) ~ "minskat")
+
+#text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- case_when(g2_19 > (1.2 * g2_13) ~ "ökat",
+                           g2_19 <= (1.2 * g2_13) & (g2_19 >= 0.8 * g2_13) ~ "varit ungefär oförändrad",
+                           g2_19 < (0.8 * g2_13) ~ "minskat"
+  )
+
+#text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen en annan:" 
+text_sexsep <- if_else(n_choice == FALSE, "Skillnaderna mellan pojkar och flickor framgår av figuren ovan.", "")
+
+#compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+compare_grades <- case_when(text_9_time == text_2_time ~ text_29_lika,
+                            text_9_time != text_2_time ~ text_29_reversed)
+
+f_dotplots(vbl = "rok")
+
+```
+
+Andelen rökare i `r studkom` markeras med en röd punkt. Den streckade linjen markerar andelen rökare i Västra Götaland i sin helhet och den blåtonade ytan anger spridningen för hälften av kommunerna i Västra Götaland, närmare bestämt den halva som omger medelvärdet. Med andra ord, den fjärdedel av kommunerna med lägst andelar ligger till vänster om det blåa fältet och fjärdedelen med de högsta ligger till höger.
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen rökare i de CAN-undersökningar som `r studkom` deltagit i, fördelat på årskurs. 
+
+```{r linegraph_rok, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "rok")
+
+```
+
+Jämfört med 2013 har andelen rökare i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[3], 0)` procent 2019). `r compare_grades` här har andelen rökare `r text_2_time` mellan dessa år, `r round(100 * tmp$andel[4], 0)` procent år 2013 och `r round(100 * tmp$andel[6], 0)` procent 2019.
+`r text_sexsep`
+
+
+## Snusare
+Den nya definitionen följer samma mönster som för rökare, det vill säga att endast de som svarat att de snusat under de senaste 12 månaderna och svarat ja på följdfrågan att de fortfarande snusar räknas som snusare.
+
+### Resultatet 2019
+
+Andelen snusare i `r studkom` redovisas i nedanstående figur tillsammans med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på årskurs.  
+
+```{r dotplot_snus, fig.width=5, fig.align="left", fig.height=fig_height}
+
+# extract data to temp dataframe
+tmp <- wf_kom %>% 
+  filter(vars == "snus" & sex == "tot") 
+
+wf_hsn <- df %>% 
+  filter(hsn == studhsn)
+
+g9_13 <- tmp$andel[tmp$grade == "Åk 9" & tmp$year == "y13"]
+g9_19 <- tmp$andel[tmp$grade == "Åk 9" & tmp$year == "y19"]
+g2_13 <- tmp$andel[tmp$grade == "Gymn åk 2" & tmp$year == "y13"]
+g2_19 <- tmp$andel[tmp$grade == "Gymn åk 2" & tmp$year == "y19"]
+
+text_9_time <- case_when(g9_19 > (1.2 * g9_13) ~ "ökat",
+                           g9_19 <= (1.2 * g9_13) & (g9_19 >= 0.8 * g9_13) ~ "varit ungefär oförändrad",
+                           g9_19 < (0.8 * g9_13) ~ "minskat")
+
+#text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- case_when(g2_19 > (1.2 * g2_13) ~ "ökat",
+                           g2_19 <= (1.2 * g2_13) & (g2_19 >= 0.8 * g2_13) ~ "varit ungefär oförändrad",
+                           g2_19 < (0.8 * g2_13) ~ "minskat"
+  )
+
+#text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen en annan:" 
+text_sexsep <- if_else(n_choice == FALSE, "Skillnaderna mellan pojkar och flickor framgår av figuren ovan.", "")
+
+#compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+compare_grades <- case_when(text_9_time == text_2_time ~ text_29_lika,
+                            text_9_time != text_2_time ~ text_29_reversed)
+
+f_dotplots(vbl = "snus")
+
+```
+
+Andelen snusare i `r studkom` markeras med en röd punkt. Den streckade linjen markerar andelen snusare i Västra Götaland i sin helhet, den blåtonade ytan anger spridningen för hälften av kommunerna i Västra Götaland, närmare bestämt den halva som omger medelvärdet. Med andra ord, den fjärdedel av kommunerna med lägst andelar ligger till vänster om det blåa fältet och fjärdedelen med de högsta ligger till höger. 
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen snusare i de CAN-undersökningar som `r studkom` deltagit i, fördelat på årskurs. 
+
+```{r linegraph_snus, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "snus")
+
+```
+
+Jämfört med 2013 har andelen snusare i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[3], 0)` procent 2019). `r compare_grades` här har andelen rökare `r text_2_time` mellan dessa år, `r round(100 * tmp$andel[4], 0)` procent år 2013 och `r round(100 * tmp$andel[6], 0)` procent 2019.
+`r text_sexsep`
+
+
+# Alkohol
+Alkoholvanorna redovisas här med hjälp av utfallet på tre frågor: berusningsdrickande, intensivdrickande och huruvida man blivit bjuden på alkohol (KOLLA DESSA - ÄR DET INTENSIV- ELLER BERUSNINGSDRICKANDE?. 
+
+## Berusningsdrickande
+Att dricka så att man blir berusad är ett tecken på riskfylld alkoholkonsumtion. Detta mäts med frågan "Tänk tillbaka på de senaste 12 månaderna. Hur ofta har du druckit så mycket alkohol att du känt dig berusad?". Här redovisas andelen elever som svarat att de varit berusade minst en gång under denna tid.
+
+### Resultatet 2019
+  I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på årskurs.  
+
+```{r dotplot_alkrisk, fig.width=5, fig.align="left", fig.height=fig_height}
+
+# extract data to temp dataframe
+tmp <- wf_kom %>% 
+  filter(vars == "alkrisk" & sex == "tot") 
+
+wf_hsn <- df %>% 
+  filter(hsn == studhsn)
+
+g9_13 <- tmp$andel[tmp$grade == "Åk 9" & tmp$year == "y13"]
+g9_19 <- tmp$andel[tmp$grade == "Åk 9" & tmp$year == "y19"]
+g2_13 <- tmp$andel[tmp$grade == "Gymn åk 2" & tmp$year == "y13"]
+g2_19 <- tmp$andel[tmp$grade == "Gymn åk 2" & tmp$year == "y19"]
+
+text_9_time <- case_when(g9_19 > (1.2 * g9_13) ~ "ökat",
+                           g9_19 <= (1.2 * g9_13) & (g9_19 >= 0.8 * g9_13) ~ "varit ungefär oförändrad",
+                           g9_19 < (0.8 * g9_13) ~ "minskat")
+
+#text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- case_when(g2_19 > (1.2 * g2_13) ~ "ökat",
+                           g2_19 <= (1.2 * g2_13) & (g2_19 >= 0.8 * g2_13) ~ "varit ungefär oförändrad",
+                           g2_19 < (0.8 * g2_13) ~ "minskat"
+  )
+
+#text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen en annan:" 
+text_sexsep <- if_else(n_choice == FALSE, "Skillnaderna mellan pojkar och flickor framgår av figuren ovan.", "")
+
+#compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+compare_grades <- case_when(text_9_time == text_2_time ~ text_29_lika,
+                            text_9_time != text_2_time ~ text_29_reversed)
+
+f_dotplots(vbl = "alkrisk")
+
+```
+
+`r studkom` markeras med en röd punkt. Den streckade linjen markerar andelen snusare i Västra Götaland i sin helhet, den blåtonade ytan anger spridningen för hälften av kommunerna i Västra Götaland, närmare bestämt den halva som omger medelvärdet. Med andra ord, den fjärdedel av kommunerna med lägst andelar ligger till vänster om det blåa fältet och fjärdedelen med de högsta ligger till höger. 
+
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever med riskfylld alkoholkonsumtion i de CAN-undersökningar som `r studkom` deltagit i, fördelat på årskurs. 
+
+```{r linegraph_alkrisk, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "alkrisk")
+
+```
+
+Jämfört med 2013 har andelen riskkonsumenter av alkohol i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[3], 0)` procent 2019). `r compare_grades` här har andelen rökare `r text_2_time` mellan dessa år, `r round(100 * tmp$andel[4], 0)` procent år 2013 och `r round(100 * tmp$andel[6], 0)` procent 2019.
+`r text_sexsep`
+
+
+## Intensivkonsumtion
+Med intensivkonsumtion menas att man vid ett och samma tillfälle druckit minst fyra stora burkar starköl/starkcider eller 25 cl sprit eller en hel flaska vin eller sex stora burkar folköl. Här redovisas andelen elever som angivit att de gjort det under de senaste 12 månaderna.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_alkkons, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>% 
+  filter(vars == "alkkons" & sex == "tot") 
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:" 
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+f_dotplots(vbl = "alkkons")
+
+```
+
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som intesivkonsumerat alkohol i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_alkkons, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "alkkons")
+
+```
+
+Jämfört med 2013 har andelen riskkonsumenter av alkohol i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+## Bjuden på alkohol
+Studier från 1975 och framåt har visat att ett restriktivt förhållningssätt från föräldrar när det gäller alkohol, inte minst bjudvanor, är relaterat till minskat ungdomsdrickande. Föräldrar är således en betydelsefull resurs i det förebyggande arbetet, inte minst kan föräldrar påverka genom att inte bjuda sina barn på alkohol. Här nedan redovisas andelen elever i de olika kommunerna i Västra Götaland som svarat att de blivit bjudna på alkohol av sina föräldrar de senaste 12 månaderna.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_bjudalk, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>% 
+  filter(vars == "bjudalk" & sex == "tot") 
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:" 
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+f_dotplots(vbl = "bjudalk")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som blivit bjuden på alkohol av sina föräldrar i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_bjudalk, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "bjudalk")
+
+```
+
+Jämfört med 2013 har andelen elever som bjudits på alkohol i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+## Konsumtionskonsekvenser
+Här redovisas utfallet på frågan om något hänt eleven i samband med att hen druckit alkohol under de senaste 12 månaderna. DENNA FRÅGA SKA INDEXERAS; MULTIPELSVAR.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_alkqons, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "qons" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "qons")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som blivit bjuden på alkohol av sina föräldrar i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_alkqons, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "qons")
+
+```
+
+Jämfört med 2013 har andelen elever som bjudits på alkohol i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+# Narkotika
+Här redovisas utfallet på frågan "Har du någon gång använt narkotika?". 
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_nark, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>% 
+  filter(vars == "nark" & sex == "tot") 
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:" 
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+f_dotplots(vbl = "nark")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som blivit bjuden på alkohol av sina föräldrar i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_nark, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "nark")
+
+```
+
+Jämfört med 2013 har andelen elever i åk 9 som använt narkotika `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+## Attityder till ANDT
+Elernas attityder till ANDT-bruk har undersökts med frågan "Hur stor risk tror du det är att människor skadar sig själva, fysiskt eller på annat sätt,…". Här redovisas andelen elever som svarat ....
+DENNA FRÅGA SKA INDEXERAS; MULTIPELSVAR.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_attityd, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "attityd" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "attityd")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som ...  i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_attityd, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "attityd")
+
+```
+
+Jämfört med 2013 har andelen elever som ...  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+## Spel
+Elevernas eventuella riskfyllda spelande har undersökts med frågan "Har du någon gång spelat om pengar?". Här redovisas andelen elever som svarat ja.
+DENNA FRÅGA SKA INDEXERAS; MULTIPELSVAR.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_spel, fig.width=5, fig.align="left", fig.height=fig_height}
+tmp <- wf_kom %>% 
+ filter(vars == "spel" & sex == "tot") 
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:" 
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed) 
+
+f_dotplots(vbl = "spel")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som ...  i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_spel, fig.height = 2.5, fig.width=5}
+
+f_linegraphs(vbl = "spel")
+
+```
+
+Jämfört med 2013 har andelen elever som ...  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+# Skolan
+Två frågor som rör skolan redovsias här. Det är dels frågan om eleven trivs i skolan, dels om hen brukar skolka.
+
+## Skoltrivsel
+Nedan redovisas andelen elever som svarat att de trivs ganska eller mycket bra på frågan om man trivs i skolan.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_trivs, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "trivs" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "trivs")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de trivs i skolan, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_trivs, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "trivs")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de trivs i skolan  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+## Skolk
+Nedan redovisas andelen elever som svarat att de brukar skolka en gång i månaden eller oftare.
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_skolk, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "skolk" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "skolk")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de brukar skolka, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_skolk, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "skolk")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de trivs i skolan  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+# Vad vet föräldrarna?
+baseras på fråga 61+62; eventuellt ett index här 
+
+## vilka kompisar?
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_kompis, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "kompis" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "kompis")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de brukar skolka, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_kompis, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "kompis")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de trivs i skolan  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+
+## Var är man på fredag/lördagkvällar?
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_evenings, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "evenings" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "evenings")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de brukar skolka, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_evenings, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "evenings")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de skolkat  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+
+# Hemma
+Här följer en redovisning av utfallen på frågor om eleven upplevt hot eller våld hemma samt om man önskat att någon av föräldrarna ska sluta dricka alkohol.
+
+## Våld i hemmet
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_violence, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "violence" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "violence")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de brukar skolka, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_violence, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "violence")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de trivs i skolan  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+
+
+## Föräldrars drickande
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_parentsalc, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "parentsalc" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "parentsalc")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de brukar skolka, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_parentsalc, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "parentsalc")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de trivs i skolan  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+
+
+# Stöd vid behov
+
+### Resultatet 2019
+I diagrammet nedan redovisas resultatet för `r studkom` från den senaste undersökningen jämfört med övriga kommuner i Hälso- och sjukvårdsnämndens område, fördelat på 15- och 17-åringar.  
+
+```{r dotplot_support, fig.width=5, fig.align="left", fig.height=fig_height}
+
+tmp <- wf_kom %>%
+  filter(vars == "support" & sex == "tot")
+
+g9_13 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y13"])
+g9_19 <- summarise(tmp, andel[tmp$grade == 9 & tmp$year == "y19"])
+g2_13 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y13"])
+g2_19 <- summarise(tmp, andel[tmp$grade == 2 & tmp$year == "y19"])
+
+
+text_9_time <- if_else(g9_13 > g9_19, "minskat", "ökat")
+text_2_time <- if_else(g2_13 > g2_19, "minskat", "ökat")
+
+text_29_lika <- "Detsamma gäller utvecklingen bland elever i gymnasieskolans åk 2:"
+text_29_reversed <- "Bland elever i gymnasieskolans åk 2 är utvecklingen den motsatta:"
+
+compare_grades <- if_else(text_9_time == text_2_time, text_29_lika, text_29_reversed)
+
+f_dotplots(vbl = "support")
+
+```
+
+### Utvecklingen över tid
+
+I figuren nedan anges andelen elever som angivit att de brukar skolka, i de CAN-undersökningar som `r studkom` deltagit i, fördelat på 15- och 17-åringar. 
+
+```{r linegraph_support, fig.height = 2.5, fig.width=5}
+
+ f_linegraphs(vbl = "support")
+
+```
+
+Jämfört med 2013 har andelen elever som angivit att de trivs i skolan  i åk 9 `r text_9_time` till 2019 (från `r round(100 * tmp$andel[1], 0)` procent år 2013 till `r round(100 * tmp$andel[5], 0)` procent 2019. `r compare_grades` från `r round(100 * tmp$andel[3], 0)` till  `r round(100 * tmp$andel[6], 0)` procent.
+`r text_sexsep`
+
+# Bilaga - tabell över utfallen i `r studkom`
+
+```{r}
+xx <- wf_kom %>% 
+  select(-c(1,7)) %>% 
+  filter(year == "y19") %>% 
+  filter(vars != "antal") %>% 
+  unite(col = categ, grade, sex, sep = "_") %>% 
+  spread(key = "categ", value = "andel") %>% 
+  select(-year) %>% 
+  mutate_at(.vars = 2:7, function(x){round(x*100, digits = 0)})
+
+# hux(xx)
+# quick_docx(xx, file ="xx.docx")
+
+
+# OBS - Fixa frågenammnen i kolumn 1
+heads1 <- c("Fråga ", "åk 2 gym", "", "", "åk 9", "", "")
+heads2 <- c("", "Flickor", "Pojkar", "Totalt", "Flickor", "Pojkar", "Totalt")
+
+hxx <-   hux(xx)%>% insert_row(heads1, after = 0) %>%  
+    insert_row(heads2, after = 1)%>% 
+    merge_cells(c(1, 1), c(2, 4)) %>% 
+    merge_cells(c(1,1), c(5, 7)) %>% 
+#    set_col_width(col = 1, 0.2) %>% 
+    set_bottom_border(2, 1:7, 1) %>% 
+    set_bottom_border(18, 1:7, 1) %>% 
+    set_top_border(1, 1:7, 1) %>% 
+    set_align(1:18, 1:7, "center") %>% 
+    set_align(1, 1:7, "center") %>% 
+    set_width(0.8) %>% 
+    set_number_format(row = 1, col = 1:7, value = NA)%>% 
+    theme_blue() %>% 
+    set_background_color(row = 1:2, col = 1:7, "steelblue") %>% 
+    set_text_color(row = 1:2, col = 1:7, "white") %>% 
+    set_caption("Antal deltagande elever")
+
+hxx
+```
+

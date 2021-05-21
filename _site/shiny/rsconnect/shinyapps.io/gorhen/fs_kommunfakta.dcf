@@ -1,0 +1,12 @@
+name: fs_kommunfakta
+title: fs_kommunfakta
+username:
+account: gorhen
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3489296
+bundleId: 4149640
+url: https://gorhen.shinyapps.io/fs_kommunfakta/
+when: 1611756241.88863
+asMultiple: FALSE
+asStatic: FALSE

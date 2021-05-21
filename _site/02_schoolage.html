@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Skolåren</title>
+
+<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-sm-12 col-md-4 col-lg-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-sm-12 col-md-8 col-lg-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Fullföljda studier</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Från vaggan till vuxen
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="01_first_years.html.html">De första åren</a>
+    </li>
+    <li>
+      <a href="02_schoolage.html">Skolåren</a>
+    </li>
+    <li>
+      <a href="03_soon_adults.html">Ung, snart vuxen</a>
+    </li>
+    <li>
+      <a href="04_mental_health.html">Barns och ungas psykiska ohälsa</a>
+    </li>
+  </ul>
+</li>
+<li>
+  <a href="05_statistik.html">Statistik</a>
+</li>
+<li>
+  <a href="06_referenser.html">Litteratur, länkar, etc.</a>
+</li>
+<li>
+  <a href="07_kommunblad.html">Kommunfakta</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Skolåren</h1>
+
+</div>
+
+
+<div id="vad-beror-skolmisslyckanden-på" class="section level2">
+<h2>Vad beror skolmisslyckanden på?</h2>
+<p>Variationen i skolresultat är stor i Västra Götaland. På skolnivå varierar t.ex. andelen behöriga avgångselever i åk 9 mellan 30 och 100 procent (2017). Denna variation har ökat påtagligt sedan 1990-talets början (Böhlmark and Holmlund, 2011; Gustafsson and Hansen, 2017).</p>
+<p>** Figur på variationen i skolresultat i VG in här.**</p>
+<p>De ökade skillnaderna i skolresultat kan till stor del förklaras av en förändrad elevsammansättning där skolorna tenderar att röra sig mot en större homogenitet beträffande elevernas socioekonomiska bakgrund och migrationsbakgrund (Holmlund et al., 2014). Den förändrade elevsammansättningen kan härledas till en ökande boendesegregation och till viss del också på friskolevalet vilket förefaller ha förstärkt effekten av boendesegregation (Grönqvist och Niknami, 2017). Mekanismerna bakom de ökande skillnaderna i elevers skolresultat måste därför sökas i både individuella förutsättningar för lärande och mer strukturella förhållanden vilka påverkar skolornas förmåga att lära ut men också barnens förmåga att lära in. Denna komplexitet försvårar varje försök att analysera drivkrafterna bakom de ökande skillnaderna i skolresultat.</p>
+<p>Sambanden mellan elevens socioekonomiska bakgrund och skolresultat eller mellan migrationsbakgrund och skolresultat är otvetydiga. Elevens sociala bakgrund (vanligen avseende föräldrarnas utbildningsnivå eller inkomst) och elevens migrationsbakgrund är de två enskilda faktorer som anses ha högst förklaringsvärde för elevens skolresultat. Men man får då inte glömma att elevens sociala bakgrund eller migrationsbakgrund får betydelse först då hen möter en social kontext – de individuella egenskaperna interagerar med kontextuella förhållanden.</p>
+<div id="migrationsbakgrund" class="section level3">
+<h3>Migrationsbakgrund</h3>
+<p>Migrationsbakgrund är ett begrepp som kan beteckna olika saker. I statistiken används begreppet ofta på två sätt:</p>
+<ul>
+<li><p>för att markera tiden man vistats i Sverige: om man har anlänt till Sverige nyligen eller om man invandrat till Sverige men gjort det för mer eller mindre längesen;</p></li>
+<li><p>enligt det sätt på vilket SCB definierar utländsk bakgrund, med utgångspunkt i födelseregion: om eleven själv eller föräldrarna är födda utomlands eller om både elev och hens föräldrar är födda utomlands.</p></li>
+</ul>
+<p>Elevens migrationsbakgrund har stor betydelse för hens skolresultat, i synnerhet om eleven invandrat efter skolstartsålder (Böhlmark and Holmlund, 2011; Skolverket, 2016a). I Figur 1 redovisas andelen avgångselever åk 9 som inte uppnått gymnasiebehörighet 2015 utifrån tiden man vistats i Sverige grupperat efter föräldrarnas utbildningsnivå.</p>
+<div class="figure">
+<img src="pics/gymbeh2015.png" alt="***Figur 1** Andelen (%) avgångselever i åk 9 som inte uppnått gymnasiebehörighet 2015, fördelat på föräldrars utbildningsnivå och migrationsbakgrund. Källa: Västdatabasen.*" width="60%%" />
+<p class="caption">
+<em><strong>Figur 1</strong> Andelen (%) avgångselever i åk 9 som inte uppnått gymnasiebehörighet 2015, fördelat på föräldrars utbildningsnivå och migrationsbakgrund. Källa: Västdatabasen.</em>
+</p>
+</div>
+<p>—- <strong>Uppdatera figuren</strong> —-</p>
+<p>I samtliga grupper ses en social gradient där elever vars föräldrar har en hög utbildningsnivå har större chans att uppnå gymnasiebehörighet än elever vars föräldrar har en medellång utbildning vilka i sin tur har en högre chans till gymnasiebehörighet än elever vars föräldrar har en låg utbildning. Migrationsbakgrund förstärker denna gradient genom att nyanlända elever, dvs elever som i detta fall anlänt till Sverige 2011 eller senare, löper betydligt större risk att misslyckas med gymnasiebehörighet än övriga elever.</p>
+<p>Skolverket har sammanställt data från IFAU om hur andelen elever i åk 9 med utländsk bakgrund (dvs migrationsbakgrund enligt alt 2 ovan) har förändrats sedan mitten av 1990-talet och hur denna grupp är sammansatt utifrån vistelsetiden i Sverige (Skolverket, 2016a).</p>
+<div class="figure">
+<img src="pics/elever_utlbakgr1994_2015.png" alt="***Figur 2** Andelen elever med utländsk bakgrund årskurs 9, 1994-2015. Källa: Skolverket 2016a.*" width="80%%" />
+<p class="caption">
+<em><strong>Figur 2</strong> Andelen elever med utländsk bakgrund årskurs 9, 1994-2015. Källa: Skolverket 2016a.</em>
+</p>
+</div>
+<p>—- <strong>Uppdatera mha Stativ-data för VG</strong> —-</p>
+<p>Sedan mitten av 1990-talet har andelen elever med utländsk bakgrund i åk 9 nästan fördubblats. Under perioden 2000 – 2006 sjönk andelen med utländsk bakgrund samtidigt fr.a. beroende av att andelen med utländsk bakgrund och som är födda utomlands minskar. Därefter ökade andelen elever i åk 9 med utländsk bakgrund genom att gruppen som är född i Sverige och gruppen som invandrat efter skolstartsålder ökar, särskilt efter 2008.</p>
+<div class="figure">
+<img src="pics/nyanl_2011_2015.png" alt="***Figur 3** Andel nyanlända elever (anlänt till Sverige 2011 – 2014) bland avgångselever i åk 9 år 2015. Källa: Västdatabasen.*" width="80%%" />
+<p class="caption">
+<em><strong>Figur 3</strong> Andel nyanlända elever (anlänt till Sverige 2011 – 2014) bland avgångselever i åk 9 år 2015. Källa: Västdatabasen.</em>
+</p>
+</div>
+<p>—- <strong>Uppdatera mha Stativ-data</strong> —-</p>
+<p>Denna ökning återspeglas i Västra Götaland på lite olika sätt. Totalt var 5,0 procent av avgångseleverna från grundskolan 2015 nyanlända elever, dvs de hade anlänt till Sverige 2011 eller senare. Andelen nyanlända elever bland avgångseleverna 2015 varierade mellan 0 och drygt 18 procent i kommunerna (Figur 3). Andelen avgångselever 2015 med utländsk bakgrund enligt SCB:s definition var 22,8 procent.</p>
+</div>
+<div id="papperslösa-barn" class="section level3">
+<h3>Papperslösa barn</h3>
+<p>Det är inte svårt att föreställa sig att barn till papperslösa föräldrar är en oerhört utsatt och sårbar grupp. Det saknas mycket kunskap om vad tillvaron för dessa barn innebär för deras hälsotillstånd och deras skolgång. Det är av naturliga skäl svårt att veta något om hur många ”papperslösa barn” som lever i Västra Götaland. De försök att skatta antalet papperslösa indikerar att det sannolikt rör sig om 10 000 – 35 000 personer i Sverige (SOU 2011:48, 2011). Men det är oklart hur många av dessa som är barn liksom hur många av dessa som lever i Västra Götaland.</p>
+<p>Det rör sig om en grupp barn som lever i Sverige utan uppehållstillstånd och som inte är asylsökande. De flesta i gruppen har fått avslag på en asylansökan eller är arbetskraftsinvandrare utan arbetstillstånd. Barnens föräldrar är hänvisad till en försörjning på den svarta arbetsmarknaden i den mån släktingar eller vänner eller ideella organisationer inte förmår ge tillräckligt stöd.</p>
+<p>Bostadsmarknaden är i princip stängd för denna grupp som får skaffa bostad på den informella bostadsmarknaden vilket ofta leder till täta flyttningar eller hemlöshet.</p>
+<p>En studie som genomförts i Västra Götaland (Ascher och Wahlström Smith, 2016) baseras på djupintervjuer med papperslösa barn och deras föräldrar visar forskarna att barnens tillvaro präglas av en extrem utsatthet men att barnen utvecklade strategier för att möta sin utsatthet genom handling, dels för att minska effekterna av hot och risker, dels för att minska den psykiska pressen på sig själva och sina närstående. De ekonomiska och materiella livsvillkoren var ofta synnerligen hårda med påtaglig fattigdom vilket oroade barnen djupt. Därtill beskrev barnen en extrem utsatthet genom ett ständigt hot om att bli avslöjade och u6tvisade vilket barnen upplevde som livsfarligt.</p>
+<p>Dessa barn har samma rätt till utbildning som andra barn även om de inte omfattas av skolplikt . Detta innebär en möjlighet för barnen att få ett rum av ”normalitet”, att åtminstone delar av vardagen få uppleva sammanhang som mer eller mindre liknade vardagen hos andra barn istället för den mer eller mindre kaotiska familjesituationen. Samtidigt innebar skolan en risk för avslöjande och barnen utvecklade en konstant beredskap för att kunna möta hotfulla situationer som kunde uppstå mer eller mindre akut. En sådan livssituation medför förstås stora svårigheter att följa skolgången och tillgodogöra sig nya kunskaper.</p>
+</div>
+<div id="socioekonomiska-faktorer" class="section level3">
+<h3>Socioekonomiska faktorer</h3>
+<p>De livsvillkor som eleven växer upp under spelar stor roll för hens skolgång. Betydelsen av elevernas sociala bakgrund bedöms i senare studier ha ökat sedan 1990-talet (Gustafsson and Hansen, 2017; Skolverket.2018 ).</p>
+<p>—-<strong>Figur på socioekonomiska skillnader - skolresultat in här?</strong>—-</p>
+<p>Här blir det viktigt att understryka att dessa samband är just samband, statistiska samvariationer, och ska inte förväxlas med orsaker <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. Istället bör man reda ut vad det är för faktorer och mekanismer som ger upphov till de statistiska samband vi observerar och mäter. Ibland kan man få höra att föräldrar med låg utbildning har ett lägre engagemang i barnens skolgång eller att det bland dessa föräldrar finns ett motstånd mot skolan och studier i största allmänhet och att det skulle förklara de generellt sämre skolresultaten. Det finns emellertid inget vetenskapligt stöd för dessa påståenden (Bunar, 2015).</p>
+<p>Man måste snarare söka förklaringar i faktorer och mekanismer som är mer unika för elever vars sociala position är mindre gynnsam.</p>
+<p>Dessa kan grupperas i faktorer som har med elevens egna resurser och förmågor att göra och sådana som mer handlar om den kontext i vilken eleven befinner sig. Till den förra gruppen kan man sortera in t.ex. barnets hälsa och kognitiva förmåga, föräldrarnas hälsotillstånd, familjens situation, föräldrarnas förmåga att stödja sina barns skolgång, ekonomiska resurser, boendeförhållanden, arbetsliv, socialt stöd och familjens nätverk.</p>
+<p>Till den senare gruppen hör faktorer som har med t.ex. bostadsområdet att göra, trygghet, kamratkretsar, skolans tillgång på resurser för att genomföra undervisningen, skolans förmåga att vara flexibel gentemot elevers olika förutsättningar för lärande, lärarnas engagemang, omsättningen av lärare, skolpersonalens eventuella fördomar om och förväntningar på elever med en sämre socioekonomisk utgångspunkt.</p>
+<p>Det är naturligtvis så att de individbundna och de kontextuella faktorerna interagerar och kan förstärka eller reducera betydelsen av den socioekonomiska bakgrunden.</p>
+</div>
+<div id="elevers-hälsotillstånd" class="section level3">
+<h3>Elevers hälsotillstånd</h3>
+<p>Det finns ett starkt samband mellan utbildningsnivå och hälsa (Socialstyrelsen och CHESS, 2012). Skolmisslyckanden är en stark prediktor för framtida ohälsa. Men det är också så att barn med ohälsa eller funktionsvariationer har större risk för skolmisslyckanden. Det sambandet är förstås uppenbart när det gäller elever med sjukdomstillstånd och funktionsvariationer som är beroende av behandling och habiliteringsinsatser. Psykisk ohälsa hos barn och ungdomar har ökat i Sverige sedan 1980-talet och utvecklingen har varit större än i de övriga nordiska länderna. Enligt Socialstyrelsens bedömning hade cirka 10 procent av pojkar och unga män år 2016 någon typ av psykisk ohälsa som föranlett kontakt med hälso- och sjukvård. För unga kvinnor var motsvarande siffra 15 procent. De diagnoser som främst ligger bakom ökningen är depressioner, olika ångestsyndrom och neuropsykiatriska funktionshinder (Socialstyrelsen, 2017).</p>
+<p>En viktig och relativt stor grupp utgörs av tidigt debuterande utvecklingsneurologiska problem, inte sällan överlappande varandra. Denna problematik har sammanfattats som ESSENCE-problematik och beräknas omfatta ca 10 procent av alla skolbarn (Gillberg, 2010).</p>
+<p>Men det finns också en grupp elever vars ohälsa är mindre synlig och där skolan riskerar att inte uppmärksamma deras behov av stöd. Det gäller t.ex. barn med vissa former av psykiatriska tillstånd och barn med lättare intellektuell funktionsnedsättning. Här bygger uppgifter om förekomst oftast på självrapporterade data i samband med olika enkätundersökningar. En stor grupp barn är sårbara och upplever psykosociala besvär t.ex. som en följd av stress i skolan, av mobbning eller utsatthet, eventuellt på grund av sviktande hemsituation.</p>
+<p>För många barn försämras hälsotillståndet under skolåren. Det gäller särskilt barn som lever under snävare livsvillkor, t.ex. till följd av fattigdom, trångboddhet eller föräldrars arbetslöshet. Här pekar forskningen på att en ökande individualisering generellt missgynnar dessa barn (G. Gillberg, 2010; Socialstyrelsen, 2009). I skolan har detta tagit sig uttryck i att eleverna har fått ta ett större ansvar för sin egen utbildning vilket sannolikt är positivt för de barn som kan få ett bra stöd från föräldrar eller andra vuxna runt barnet men missgynnar de barn som inte har adekvat stöd från vuxna runt barnet. Andelen 13- och 15-åringar, fr.a. flickor, med självrapporterade psykiska besvär ökar återigen efter en minskning under 2000-talet och varierar nu mellan 20–40 procent av unga. Denna utveckling menar Socialstyrelsen speglar en reell ökning av psykisk ohälsa och kan knappast förklaras med förändrade behandlingsrutiner eller ökad benägenhet bland unga att rapportera psykiska besvär (Socialstyrelsen, 2017).</p>
+<p>En särskilt sårbar grupp är asylsökande barn, ensamkommande barn och i synnerhet papperslösa barn som ofta lever under oanständiga förhållanden.</p>
+</div>
+<div id="kontextens-betydelse-är-stor" class="section level3">
+<h3>Kontextens betydelse är stor</h3>
+<p>Under de senaste decennierna har samhället genomgått en genomgripande förändring som en följd av globalisering, digitalisering och demografiska förändringar. Samhällsutvecklingen påverkar kommunernas strategier för att planera sin skolverksamhet. Det är därför viktigt att i analyser av skolresultat också väga in faktorer som så att säga är verksamma ovanför den enskilda elevens huvud och som hen inte kan påverka på egen hand, s.k. kontextuella faktorer.</p>
+<p>Det är verkligen inte en originell tanke att människor påverkas av den omgivning man lever i. Det stod klart redan för Hippokrates för 2500 år sedan att människors hälsa påverkas av omgivningen man lever i och att sjukdomsmönster skiljer sig åt mellan olika geografiska områden. Forskningen om hur kontextuella faktorer kan påverka individers hälsotillstånd tog fart under 1990-talet då man upplevde att riskfaktorbundna förklaringar inte var tillräckliga för att förstå hur skillnader i ohälsa mellan befolkningsgrupper kunde uppstå. Forskningen fick också ny energi i och med att nya analysmetoder utvecklades i takt med att datorer blev kraftfullare och gjorde det möjligt att behandla alltmer komplexa statistiska modeller och större datamängder. Multinivå-analyser och rumsliga analyser med hjälp av geografiska informationssystem (GIS) är exempel på sådana verktyg som idag kan användas i vanliga persondatorer.</p>
+<p>Nedanstående figur är en schematisk bild av hur faktorer på olika samhällsnivåer kan påverka enskilda elevers skolresultat.</p>
+<div class="figure">
+<img src="pics/levels.png" alt="***Figur 4** Schematisk bild av samhällsnivåer med exempel på kontexter som påverkar skolresultat. Fritt efter Kölegård (2012).*" width="80%%" />
+<p class="caption">
+<em><strong>Figur 4</strong> Schematisk bild av samhällsnivåer med exempel på kontexter som påverkar skolresultat. Fritt efter Kölegård (2012).</em>
+</p>
+</div>
+<p>Människors sociala kontext är alltså den politiska, kulturella, sociala och ekonomiska omgivning som karakteriserar ett visst samhälle (Diez Roux and Mair, 2010). I det perspektivet kan det alltså vara otillräckligt att enbart fokusera på individbundna faktorer som t.ex. socioekonomiska förhållanden eller migrationsbakgrund på individnivå, för att förstå varför skillnader i skolresultat uppstår.</p>
+<p>Alla individer har ett visst handlingsutrymme vilket används för att påverka sitt liv så att omständigheterna för sig själv och sina närmaste blir så gynnsamma som möjligt. Men storleken på handlingsutrymmet begränsas av de ekonomiska, kulturella och politiska resurser – individuella och kollektiva - som är tillgängliga för individen. Dessa resurser samvarierar med den sociala positionen vilket ger upphov till de socioekonomiska skillnader man ser beträffande skolresultat (Phelan et al., 2010; Kommissionen för jämlik hälsa, 2016).</p>
+<p>En svårighet är att identifiera på vilket sätt kontextuella faktorer ska definieras. I en tidigare VGR-studie används den kommunala skattekraften som en indikator på den samhälleliga kontexten.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Mot bakgrund av att andelen nyanlända elever varierar kraftigt mellan kommunerna i Västra Götaland användes också denna andel som en kontextuell variabel.</p>
+<p>Resultatet från studien visade ett starkt samband mellan den kommunala skattekraften och avgångselevernas skolresultat, även då man kontrollerat för socioekonomiska faktorer och utländsk bakgrund.</p>
+<div class="figure">
+<img src="pics/results_schoolstudy.png" alt="***Figur 5** *" width="100%%" />
+<p class="caption">
+<em><strong>Figur 5</strong> </em>
+</p>
+</div>
+<p>I figuren anges den kommunala skattekraften på x-axeln. Värdet anger procentandelen av riksgenomsnittet (= 100). På y-axeln anges andelen avgångselever som inte lyckats uppnå gymnasiebehörighet. För samtliga ungdomsgrupper finns ett samband sådant att elever som bor i kommuner med lägre skattekraft tenderar att i större utsträckning inte når behörighet till gymnasieskolans yrkeslinjer. Det finns också betydande skillnader mellan elev-grupperna där elever födda utomlands löper en betydligt större risk att misslyckas än övriga grupper. Sverige-födda elever med båda föräldrarna födda i Sverige har lägst andelar men även i denna grupp ses en högre risk för misslyckande om hen bor i kommuner med lägre skattekraft.</p>
+<p>Resultaten från studien antyder att kontextuella faktorer som näringslivsstruktur, arbetsmarknad, demografiska och socioekonomiska förhållanden har stor betydelse för risken för skolmisslyckanden. Närings- och arbetsmarknadspolitik kan därför spela stor roll för förmågan att motverka skolmisslyckanden. I det sammanhanget blir det ur Västra Götalandsregionens perspektiv särskilt viktigt att fundera över hur de satsningar som görs för att påverka utvecklingen av näringsliv och arbetsmarknad i regionen också kan bidra till att skolmisslyckanden minskar i hela regionen.</p>
+<p>Boendesegregation anses vara en viktig drivkraft bakom en ökande skolsegregation vilken i sin tur är den kanske viktigaste strukturella faktorn bakom de ökade skillnaderna i skolresultat (Skolverket, 2018). Boendesegregation innebär en åtskillnad mellan bostadsområden beträffande t.ex. socioekonomiska faktorer eller utifrån etnisk bakgrund. Boendesegregation kan påverka elevers skolresultat på olika sätt. Vissa områden kommer att karakteriseras av större homogenitet av grupper med små ekonomiska, kulturella och politiska resurser och andra områden i vilka befolkningen har större tillgång till sådana resurser.</p>
+<p>Sådana strukturella förhållanden driver på en homogenisering även i bostadsområdets skolor (Bunar, 2015). I de förra områdena blir kvaliteten och utbudet av välfärdstjänster och förhållanden i den fysiska miljön väsentliga för att kompensera bristen på resurser på hushållsnivå. Bostadsområden med sämre strukturella förhållanden kan också påverka sociala interaktionsmönster och möjligheter att utveckla sociala nätverk av betydelse för t.ex. arbetsdeltagande.</p>
+<p>Ett segregerat samhälle med få sociala kontakter mellan bostadsområden leder lätt till stigmatisering av områden med sämre strukturella betingelser. Boende i sådana områden kan därför stigmatiseras och diskrimineras enbart för att de bor i dessa områden.</p>
+<p>Särskilt viktiga insatsområden är förutom att påverka möjligheterna för boende i dessa områden att komma in på arbetsmarknaden, att sörja för en hög standard och kvalitet i områdets skolor och andra välfärdstjänster. I det här sammanhanget är också de insatser intressanta som syftar till att ta tillvara de kompetenser och erfarenheter som föräldrar och andra vuxna besitter, t.ex. genom komplementära skolor samt insatser för att bryta den stigmatisering som tenderar att uppstå i bostadsområden med sämre strukturella förhållanden (Bunar, 2012).</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Begreppet orsaker ses i denna rapport som något annat än observerbara empiriska regelbundenheter eller statistiska samband – en orsak är snarare det som förklarar att det observerade sambandet uppstår. Denna ståndpunkt följer således den vetenskapsteoretiska tradition som brukar benämnas <em>kritisk realism</em>. Det för alltför långt att utveckla argumentationen här men för en svensk översikt kan rekommenderas Danermark (2003) sid 92 ff. För en fördjupad argumentation se Sayer (2010), sid 103ff. Distinktionen blir viktig i policy-sammanhang eftersom beslut som syftar till att påverka utvecklingen bör baseras på kunskap om varför t.ex. ett samband mellan socioekonomiska faktorer och skolresultat uppstår, dvs vilka mekanismer som ger upphov till detta samband. Om vi inte vet det blir det svårt att förstå vilka insatser som kan påverka sambandet.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>VGR 2018.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

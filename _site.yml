@@ -1,0 +1,27 @@
+name: "my-website"
+
+
+navbar:
+  title: ""
+  type: default
+  left:
+    - text: "Fullföljda studier"
+      href: index.html
+
+    - text: "Från vaggan till vuxen"
+      menu:
+        - text: "De första åren"
+          href: 01_first_years.html.html
+        - text: "Skolåren"
+          href: 02_schoolage.html
+        - text: "Ung, snart vuxen"
+          href: 03_soon_adults.html
+        - text: "Barns och ungas psykiska ohälsa"
+          href: 04_mental_health.html
+    - text: "Statistik"
+      href: 05_statistik.html
+    - text: "Litteratur, länkar, etc."
+      href: 06_referenser.html
+    - text: "Kommunfakta"
+      href: 07_kommunblad.html
+

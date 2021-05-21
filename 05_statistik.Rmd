@@ -1,0 +1,54 @@
+---
+title: "Statistik"
+
+---
+
+## Vad finns här?
+
+Här hittar du statistik för att producera egna tabeller och diagram relaterade till skolresultat. Länkarna refererar till publika databaser och tanken är att de underlättar för den som snabbt vill hitta specifika indikatorer.
+
+### Kommunblad
+
+Det finns även sammanställd statistik för ett antal bas-indikatorer per kommun. Du hittar dem [här](kommunblad.html).
+
+###
+
+### De första åren
+
+#### Barnfattigdomsindex efter region, år och resultat.
+
+Statistiken avser andel barn 0-17 år med svensk eller utländsk bakgrund som finns i ekonomiskt utsatta hushåll. Med ekonomiskt utsatta menas hushåll med låg inkomst eller socialbidrag. Med låg inkomst menas lägsta utgiftsnivå baserad på den socialbidragsnorm som fastställdes på 1980-talet (med inflationsuppräkningar) och en norm för boendeutgifter.
+
+Om inkomsterna understiger normen för dessa utgifter definieras detta som låg inkomst. Med socialbidrag menas att sådant erhållits minst en gång under året. Med utländsk bakgrund menas minst en utlandsfödd förälder. Måttet är ett absolut mått till skillnad från det relativa mått som också används ibland.
+
+[Andel barn i hushåll med låg inkomst eller socialbidrag efter bakgrund.](http://pxwebb2017.vgregion.se/PXWeb/pxweb/sv/V%C3%A4lf%C3%A4rd/V%C3%A4lf%C3%A4rd/Barnfattigdom.px/?rxid=41618624-9d6b-4d14-8dcd-b9f3e48cb1ab)
+
+#### Barn och unga med minst en långtidsarbetslös förälder
+
+Antal invånare 0-19 med minst en långtidsarbetslös förälder dividerat med totalt antal invånare 0-19 år, multiplicerat med 100. Med långtidsarbetslöshet avses helt utan arbete eller i arbetsmarknadspolitisk åtgärd i 90 eller fler dagar under året. Behöver ej vara 90 sammanhängande dagar. I de fall där både biologiska och adoptionsföräldrar finns så räknas båda med. Källa: SCB.
+
+[Invånare 0-19 år med minst en långtidsarbetslös förälder, andel (%)](https://www.kolada.se/verktyg/fri-sokning/?kpis=61546&years=30197,30196,30195,30194,30192,30191,30190,30189,30188&municipals=16669,16670,16671,16672,16673,16674,16675,16676,16677,16678,16679,16680,16681,16682,16683,16684,16685,16686,16687,16688,16689,16690,16691,16692,16693,16694,16695,16696,16697,16698,16699,16700,16701,16702,16703,16704,16705,16706,16707,16708,16709,16710,16711,16712,16713,16714,16715,16716,16717,33623&rows=municipal,kpi&visualization=bar-chart)
+
+
+### 
+
+### Skolåren
+
+#### Gymnasiebehörighet
+
+Andelen behöriga till gymnasieskolan avser de som är behöriga till ett yrkesförberedande program.
+
+År 2011 ändrades reglerna för behörighet till gymnasieskolan. Från hösten 2011 krävs minst godkänt betyg i svenska, engelska, matematik och ytterligare minst fem ämnen för att bli antagen till ett yrkesförberedande program samt ytterligare nio för att bli antagen till ett högskoleförberedande program. Tidigare krävdes minst betyget godkänd i ämnena svenska/svenska som andraspråk, engelska och matematik. Andelen beräknas av de elever i årskurs 9 som fått eller skulle ha fått betyg enligt det mål- och kunskapsrelaterade betygssystemet (elever som lämnat årskurs 9 utan slutbetyg ingår således). Betygen mäts före prövning. Från och med våren 2009 ingår alla skolor, inte bara kommunala utan också fristående skolor, internationella skolor och riksinternat. Det kan förekomma tomma celler på grund av för få elever men också att huvudmannen inte rapporterat in data.
+
+[Behörighet till gymnasieskolan efter kön, region och år. Andel (procent).](http://fohm-app.folkhalsomyndigheten.se/Folkhalsodata/pxweb/sv/A_Folkhalsodata/A_Folkhalsodata__2_Kompetenser__aGymnasie/BehgymnReg.px/)
+
+###
+
+### Ung, snart vuxen
+
+#### Gymnasieexamen
+
+Tidsserien startar 2015 på grund av övergång från den gamla till den nya gymnasieskolan. Slutbetyg i den gamla gymnasieskolan och yrkesexamen i den nya gymnasieskolan är inte direkt jämförbara. 
+
+[Gymnasieexamen inom 4 år efter kön, region och år. Andel (procent).](http://fohm-app.folkhalsomyndigheten.se/Folkhalsodata/pxweb/sv/A_Folkhalsodata/A_Folkhalsodata__2_Kompetenser__aGymnasie/ExamgymnReg.px/)
+

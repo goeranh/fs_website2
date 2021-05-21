@@ -1,0 +1,14 @@
+---
+title: "init_shiny"
+author: "GH"
+date: '2021-01-19'
+output: html_document
+runtime: shiny
+---
+
+```{r init, include=FALSE}
+
+rmarkdown::run("kommunblad.Rmd")
+
+```
+
